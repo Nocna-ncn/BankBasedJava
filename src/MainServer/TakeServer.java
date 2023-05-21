@@ -27,11 +27,10 @@ public class TakeServer implements Runnable {
                 send.close();
                 reader.close();
                 socket.close();
-                System.out.println("关闭连接");
+                System.out.println("关闭连接！");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
     }
 }

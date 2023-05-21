@@ -17,12 +17,12 @@ public class TakeNumber {
 
             try (Socket socket = new Socket("localhost", 10808)) {
                 OutputStreamWriter send = new OutputStreamWriter(socket.getOutputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 send.write("取号机\n");
                 send.flush();
 
                 // System.out.println("已连接!");
-                System.out.println("服务器返回："+ reader.readLine());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                System.out.println("服务器返回：" + reader.readLine());
 
                 reader.close();
                 send.close();
@@ -31,8 +31,8 @@ public class TakeNumber {
                 System.out.println("连接失败!");
                 e.printStackTrace();
             }
-            
+
         }
     }
-    
+
 }
