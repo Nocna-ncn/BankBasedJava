@@ -12,6 +12,8 @@ public class MainServer {
 
         // The take number machine
         new Thread(new TakeServer()).start();
+
+        // The windows server running.
         new Thread(new WindowServer()).start();
 
         
