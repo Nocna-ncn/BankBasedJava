@@ -21,6 +21,8 @@ public class TakeServer implements Runnable {
                 System.out.println("接受到客户端数据：" + reader.readLine() + "取号。");
                 synchronized (MainServer.lockObject) {
                     ++MainServer.number;
+                    MainServer.personQueue.offer(MainServer.number);
+                    
                     send.write("您的号码是：" + MainServer.number + '\n');
                     send.flush();
                 }

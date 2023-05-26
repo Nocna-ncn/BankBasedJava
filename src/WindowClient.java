@@ -34,9 +34,11 @@ public class WindowClient {
 
             if (!wNumIsEmpty(serverInput)) {
                 System.out.println(serverInput + " <<<");
+            } else {
+                System.out.println(serverInput.substring(4, serverInput.length()) + serverInput.substring(0, 4));
             }
-            buffer.flip();
         }
+        buffer.flip();
 
         return;
     }

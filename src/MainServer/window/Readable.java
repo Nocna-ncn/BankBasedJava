@@ -23,6 +23,7 @@ public class Readable implements Runnable {
             return true;
         }
         return false;
+
     }
 
     private static void whichCmd(SocketChannel channel, String clientInput) throws IOException {
@@ -31,6 +32,9 @@ public class Readable implements Runnable {
 
         switch (command) {
             case "叫号" -> {
+                synchronized (MainServer.lockObject) {
+                    MainServer.windowQueue.set(windowNumber - 1, MainServer.personQueue.poll());
+                }
 
             }
 
@@ -39,9 +43,15 @@ public class Readable implements Runnable {
             }
         }
 
-        channel.write(ByteBuffer.wrap(
-                new String(MainServer.windowNumber + "号窗口" + command + "：" + MainServer.number)
-                        .getBytes()));
+        synchronized (MainServer.lockObject) {
+            channel.write(ByteBuffer.wrap(
+                    new String(
+                            MainServer.windowNumber + "号窗口" + command + "："
+                                    + MainServer.windowQueue.get(windowNumber - 1))
+                            .getBytes()));
+            System.out.println(windowNumber + "号窗口分配：" + MainServer.windowQueue.get(windowNumber - 1));
+        }
+
     }
 
     @Override
@@ -66,8 +76,9 @@ public class Readable implements Runnable {
             if (wNumIsEmpty(clientInput)) {
                 synchronized (MainServer.lockObject) {
                     ++MainServer.windowNumber;
+                    MainServer.windowQueue.offer(MainServer.windowNumber);
                     channel.write(ByteBuffer.wrap(
-                            new String(MainServer.windowNumber + "号窗口").getBytes()));
+                            new String(MainServer.windowNumber + "号窗口" + "由于无窗口号现服务器已为您分配：").getBytes()));
                     System.out.println("已为客户端分配窗口号：" + MainServer.windowNumber);
                 }
             } else {
