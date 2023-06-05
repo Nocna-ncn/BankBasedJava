@@ -78,7 +78,7 @@ public class Readable implements Runnable {
                     ++MainServer.windowNumber;
                     MainServer.windowQueue.offer(MainServer.windowNumber);
                     channel.write(ByteBuffer.wrap(
-                            new String(MainServer.windowNumber + "号窗口" + "由于无窗口号现服务器已为您分配：").getBytes()));
+                            new String(MainServer.windowNumber + "号窗口" + "由于初始无窗口号现服务器已为您分配：").getBytes()));
                     System.out.println("已为客户端分配窗口号：" + MainServer.windowNumber);
                 }
             } else {

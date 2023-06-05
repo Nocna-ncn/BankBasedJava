@@ -8,8 +8,8 @@ import java.nio.channels.SocketChannel;
 
 public class Acceptable implements Runnable {
 
-    private final ServerSocketChannel serverChannel;
-    private final Selector selector;
+    private ServerSocketChannel serverChannel;
+    private Selector selector;
     private SocketChannel channel;
 
     public Acceptable(ServerSocketChannel serverChannel, Selector selector) {
