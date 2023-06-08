@@ -1,7 +1,6 @@
 package MainServer;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.LinkedList;
 
 public class MainServer {
@@ -16,12 +15,16 @@ public class MainServer {
 
         // The take number machine
         new Thread(new TakeServer()).start();
-
-        System.out.println("No hello world");
+        System.out.println("TakeServer running!");
 
         // The windows server running.
         new Thread(new WindowServer()).start();
-               
+        System.out.println("WindowServer running!");
+
+        // The Display server running.
+        new Thread(new DisplayServer()).start();
+        System.out.println("DisplayServer running!");
+
     }
 
 }

@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import MainServer.MainServer;
+import MainServer.DisplayServer;
 
 public class Readable implements Runnable {
 
@@ -34,6 +35,9 @@ public class Readable implements Runnable {
             case "叫号" -> {
                 synchronized (MainServer.lockObject) {
                     MainServer.windowQueue.set(windowNumber - 1, MainServer.personQueue.poll());
+                }
+                synchronized (DisplayServer.SocketHandler.lockObject) {
+                    DisplayServer.SocketHandler.lockObject.notify();
                 }
 
             }

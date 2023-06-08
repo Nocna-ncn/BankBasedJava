@@ -13,12 +13,11 @@ public class TakeServer implements Runnable {
 
         try (ServerSocket server = new ServerSocket(10808)) {
             while (true) {
-                System.out.println("等待客户端连接......");
                 Socket socket = server.accept();
-                System.out.println("客户端连接：" + socket.getInetAddress().getHostName());
+                System.out.println("取号客户端连接：" + socket.getInetAddress().getHostName());
                 OutputStreamWriter send = new OutputStreamWriter(socket.getOutputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                System.out.println("接受到客户端数据：" + reader.readLine() + "取号。");
+                // System.out.println("接受到客户端数据：" + reader.readLine() + "取号。");
                 synchronized (MainServer.lockObject) {
                     ++MainServer.number;
                     MainServer.personQueue.offer(MainServer.number);
