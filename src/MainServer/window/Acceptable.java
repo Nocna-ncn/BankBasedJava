@@ -22,7 +22,7 @@ public class Acceptable implements Runnable {
 
         try {
             channel = serverChannel.accept();
-            System.out.println("客户端已连接，ip地址为：" + channel.getRemoteAddress());
+            System.out.println("窗口客户端已连接，ip地址为：" + channel.getRemoteAddress());
 
             channel.configureBlocking(false);
             channel.register(selector, SelectionKey.OP_READ, new Readable(channel));

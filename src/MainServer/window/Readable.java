@@ -3,9 +3,8 @@ package MainServer.window;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-
-import MainServer.MainServer;
 import MainServer.DisplayServer;
+import MainServer.MainServer;
 
 public class Readable implements Runnable {
 
@@ -68,7 +67,7 @@ public class Readable implements Runnable {
 
             if (bytesRead == -1) {
                 // 客户端断开连接
-                System.out.println("客户端断开连接：" + channel.getRemoteAddress());
+                System.out.println("窗口客户端断开连接：" + channel.getRemoteAddress());
                 channel.close();
                 return;
             }

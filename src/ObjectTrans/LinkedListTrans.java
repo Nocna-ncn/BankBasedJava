@@ -1,10 +1,4 @@
-package MainServer;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+package ObjectTrans;
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -33,5 +27,4 @@ public class LinkedListTrans implements Serializable {
     public LinkedList<?> getWindowList() {
         return this.windowList;
     }
-
 }

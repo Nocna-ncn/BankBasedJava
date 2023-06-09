@@ -9,6 +9,7 @@ public class WindowClient {
     private static boolean running = true;
     private static int bytesRead;
     private static String ServerAddress;
+    private static int serverPort = 10809;
     private static Scanner scanner;
     private static Integer windowNumber = 0;
 
@@ -45,11 +46,11 @@ public class WindowClient {
 
     public static void main(String[] args) {
 
-        System.out.println("输入服务器IP地址：");
         scanner = new Scanner(System.in);
+        System.out.println("输入服务器IP地址：");
         ServerAddress = scanner.nextLine();
 
-        try (SocketChannel channel = SocketChannel.open(new InetSocketAddress(ServerAddress, 10809))) {
+        try (SocketChannel channel = SocketChannel.open(new InetSocketAddress(ServerAddress, serverPort))) {
 
             System.out.println("已连接服务器！");
             while (running) {

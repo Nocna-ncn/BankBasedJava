@@ -1,13 +1,9 @@
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-
-import MainServer.LinkedListTrans;
+import ObjectTrans.LinkedListTrans;
 
 public class DisplayClient {
 
@@ -16,7 +12,11 @@ public class DisplayClient {
     private static int serverPort = 10810;
 
     public static void main(String[] args) throws UnknownHostException, IOException {
-        try (Socket socket = new Socket("localhost", 10810)) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("请输入服务器地址：");
+            serverAddress = scanner.nextLine();
+        }
+        try (Socket socket = new Socket(serverAddress, serverPort)) {
             System.out.println("与服务器连接成功");
 
                 ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());

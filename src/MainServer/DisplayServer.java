@@ -1,11 +1,10 @@
 package MainServer;
 
 import java.io.IOException;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import ObjectTrans.LinkedListTrans;
 
 public class DisplayServer implements Runnable {
 
@@ -60,17 +59,6 @@ public class DisplayServer implements Runnable {
                         objectOutputStream.flush();
                         objectOutputStream.reset();
 
-                        // byte[] serializableObject = linkedListTrans.serializeObject(linkedListTrans);
-
-                        // System.out.println("Main S queue: " + serializableObject.length);
-
-                        // LinkedListTrans receivedObject = linkedListTrans.deserializeObject(serializableObject);
-
-                        // System.out.println("list1: " + receivedObject.getPersonList());
-                        // System.out.println("list2: " + receivedObject.getWindowList());
-
-                        // out.write(serializableObject);
-                        // out.flush();
                     }
                 }
 
@@ -82,3 +70,4 @@ public class DisplayServer implements Runnable {
         }
     }
 }
+

@@ -6,15 +6,19 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class TakeNumber {
+    private static String serverAddress;
+    private static int serverPort = 10808;
 
     public static void main(String[] args) {
 
         try (Scanner input = new Scanner(System.in)) {
+            System.out.print("请输入服务器地址：");
+            serverAddress = input.nextLine();
             while (true) {
                 System.out.println("请回车取号。");
                 input.nextLine();
 
-                try (Socket socket = new Socket("localhost", 10808)) {
+                try (Socket socket = new Socket(serverAddress, serverPort)) {
                     OutputStreamWriter send = new OutputStreamWriter(socket.getOutputStream());
                     send.write("取号机\n");
                     send.flush();

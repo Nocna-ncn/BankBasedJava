@@ -33,7 +33,7 @@ public class WindowServer implements Runnable, Closeable {
 
             while (true) {
                 int count = selector.select();
-                System.out.println("监听到" + count + "个事件。");
+                System.out.println("窗口服务器监听到" + count + "个事件。");
 
                 Set<SelectionKey> selectionKeys = selector.selectedKeys();
                 Iterator<SelectionKey> iterator = selectionKeys.iterator();
@@ -56,7 +56,7 @@ public class WindowServer implements Runnable, Closeable {
         Object temp = key.attachment();
 
         if (temp instanceof Runnable) {
-            System.out.println("事件run()");
+            // System.out.println("事件run()");
             ((Runnable) temp).run();
         }
 
