@@ -4,27 +4,31 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+
 import ObjectTrans.LinkedListTrans;
 
 public class DisplayServer implements Runnable {
 
+    public static Object lockObject = new Object();
+    private static LinkedList<ObjectOutputStream> outputStreams = new LinkedList<>();
+
     @Override
     public void run() {
-
         try {
             try (ServerSocket serverSocket = new ServerSocket(10810)) {
                 while (true) {
-                    System.out.println("显示服务器等待新的连接...");
                     Socket socket = serverSocket.accept();
                     System.out.println("显示服务器与客户端连接已建立，启动新线程处理连接");
                     SocketHandler handler = new SocketHandler(socket);
                     Thread thread = new Thread(handler);
-                    thread.start(); // 启动新线程处理连接
+                    thread.start();
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public class SocketHandler implements Runnable {
@@ -38,36 +42,34 @@ public class DisplayServer implements Runnable {
             this.socket = socket;
             this.linkedListTrans = new LinkedListTrans(null, null);
             this.objectOutputStream = new ObjectOutputStream(this.socket.getOutputStream());
+
+            synchronized (DisplayServer.lockObject) {
+                DisplayServer.outputStreams.add(objectOutputStream);
+            }
         }
 
         @Override
         public void run() {
             try {
-
                 while (true) {
-                    synchronized (lockObject) {
-                        lockObject.wait();
-                    }
+                    System.out.println("Display Server start!");
                     synchronized (MainServer.lockObject) {
-                        // System.out.println("Main p queue: " + MainServer.personQueue);
-                        // System.out.println("Main w queue: " + MainServer.windowQueue);
-
                         linkedListTrans.setPersonList(MainServer.personQueue);
                         linkedListTrans.setWindowList(MainServer.windowQueue);
 
-                        objectOutputStream.writeObject(linkedListTrans);
-                        objectOutputStream.flush();
-                        objectOutputStream.reset();
-
+                        // 遍历所有客户端的输出流，将数据发送给每个客户端
+                        for (ObjectOutputStream outputStream : DisplayServer.outputStreams) {
+                            outputStream.writeObject(linkedListTrans);
+                            outputStream.flush();
+                            outputStream.reset();
+                        }
                     }
+                    Thread.sleep(2000); // 暂停 2 秒钟
                 }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
     }
 }
-

@@ -37,10 +37,10 @@ public class TakeServer implements Runnable {
                 switch (command) {
                     case "g" -> {
                         synchronized (MainServer.lockObject) {
-                            ++MainServer.number;
-                            MainServer.personQueue.offer(MainServer.number);
+                            ++MainServer.numberCount;
+                            MainServer.personQueue.offer(MainServer.numberCount);
 
-                            send.write("您取的号码是：" + MainServer.number + '\n');
+                            send.write("您取的号码是：" + MainServer.numberCount + '\n');
                             send.flush();
                         }
                     }

@@ -31,7 +31,7 @@ public class TakeNumber {
                     break;
                 }
                 if (!command.equals("g") && !command.equals("s")) {
-                    System.out.println("输入不正确，请重新输入！");
+                    System.out.println("输入错误，请重新输入。");
 
                     continue;
                 }
@@ -58,7 +58,7 @@ public class TakeNumber {
                         }
 
                         if (number.equals("q")) {
-                            
+
                             send.close();
                             socket.close();
                             continue;
@@ -71,7 +71,7 @@ public class TakeNumber {
 
                     // System.out.println("已连接!");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    System.out.println("服务器返回>>>" + reader.readLine());
+                    System.out.println("服务器返回>>> " + reader.readLine());
 
                     reader.close();
                     send.close();

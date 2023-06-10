@@ -8,8 +8,8 @@ import ObjectTrans.Window;
 public class MainServer {
 
     public static Object lockObject = new Object();
-    public static volatile int number = 0;
-    public static volatile int windowNumber = 0;
+    public static volatile int numberCount = 0;
+    public static volatile int windowNumberCount = 0;
     public static volatile LinkedList<Integer> personQueue = new LinkedList<>();
     public static volatile LinkedList<Window> windowQueue = new LinkedList<>();
 
