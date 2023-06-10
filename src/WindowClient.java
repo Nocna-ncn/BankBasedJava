@@ -47,21 +47,21 @@ public class WindowClient {
     public static void main(String[] args) {
 
         scanner = new Scanner(System.in);
-        System.out.println("输入服务器IP地址：");
+        System.out.print("输入服务器IP地址：");
         ServerAddress = scanner.nextLine();
 
         try (SocketChannel channel = SocketChannel.open(new InetSocketAddress(ServerAddress, serverPort))) {
 
             System.out.println("已连接服务器！");
+            String input = null;
             while (running) {
-                String input = "";
                 if (windowNumber != 0) {
                     System.out.println("<" + windowNumber + "号窗口>");
                 }
                 System.out.println("======");
                 System.out.println("c) 叫号");
                 System.out.println("s) 过号");
-                System.out.println("Not c and Not s) 退出");
+                System.out.println("q) 退出");
                 System.out.println("======");
                 System.out.print("：");
 
@@ -72,11 +72,14 @@ public class WindowClient {
 
                     case "s" -> send(channel, "过号");
 
-                    default -> {
+                    case "q" -> {
                         System.out.println("退出");
                         running = false;
                         channel.close();
                         return;
+                    }
+                    default -> {
+                        continue;
                     }
                 }
 

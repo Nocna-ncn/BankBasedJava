@@ -49,8 +49,8 @@ public class DisplayServer implements Runnable {
                         lockObject.wait();
                     }
                     synchronized (MainServer.lockObject) {
-                        System.out.println("Main p queue: " + MainServer.personQueue);
-                        System.out.println("Main w queue: " + MainServer.windowQueue);
+                        // System.out.println("Main p queue: " + MainServer.personQueue);
+                        // System.out.println("Main w queue: " + MainServer.windowQueue);
 
                         linkedListTrans.setPersonList(MainServer.personQueue);
                         linkedListTrans.setWindowList(MainServer.windowQueue);

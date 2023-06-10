@@ -2,8 +2,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 import java.util.Scanner;
 import ObjectTrans.LinkedListTrans;
+import ObjectTrans.Window;
 
 public class DisplayClient {
 
@@ -25,10 +27,18 @@ public class DisplayClient {
                 receivedObject = (LinkedListTrans) objectInputStream.readObject();
 
                 System.out.println("Received object personlist: " + receivedObject.getPersonList());
-                System.out.println("Received object windowlist: " + receivedObject.getWindowList());
+
+                LinkedList<Window> list = (LinkedList<Window>) receivedObject.getWindowList();
+                LinkedList<Integer> windowList = new LinkedList<>();
+
+                for (int i = 0; i < list.size(); i++) {
+                    windowList.offer(list.get(i).personNumber);
+                }
+
+                System.out.println("Received object windowlist: " + windowList);
 
             }
-
+            
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -3,13 +3,15 @@ package MainServer;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import ObjectTrans.Window;
+
 public class MainServer {
 
     public static Object lockObject = new Object();
     public static volatile int number = 0;
     public static volatile int windowNumber = 0;
-    public static volatile LinkedList<Integer> windowQueue = new LinkedList<>();
     public static volatile LinkedList<Integer> personQueue = new LinkedList<>();
+    public static volatile LinkedList<Window> windowQueue = new LinkedList<>();
 
     public static void main(String[] args) throws IOException {
 

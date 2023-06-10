@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import MainServer.DisplayServer;
 import MainServer.MainServer;
+import ObjectTrans.Window;
 
 public class Readable implements Runnable {
 
@@ -30,18 +31,31 @@ public class Readable implements Runnable {
 
         String command = clientInput.substring(4, 6);
 
+        Integer commandInteger = null;
+
         switch (command) {
             case "叫号" -> {
                 synchronized (MainServer.lockObject) {
-                    MainServer.windowQueue.set(windowNumber - 1, MainServer.personQueue.poll());
+                    // MainServer.windowQueue.set(windowNumber - 1, MainServer.personQueue.poll());
+                    MainServer.windowQueue.get(windowNumber - 1).personNumber = MainServer.personQueue.poll();
                 }
                 synchronized (DisplayServer.SocketHandler.lockObject) {
                     DisplayServer.SocketHandler.lockObject.notify();
                 }
 
+                commandInteger = MainServer.windowQueue.get(windowNumber - 1).personNumber;
+
             }
 
             case "过号" -> {
+                synchronized (MainServer.lockObject) {
+                    commandInteger = MainServer.windowQueue.get(windowNumber - 1).personNumber;
+                    MainServer.personQueue.offer(commandInteger);
+                    MainServer.windowQueue.get(windowNumber - 1).personNumber = null;
+                }
+                synchronized (DisplayServer.SocketHandler.lockObject) {
+                    DisplayServer.SocketHandler.lockObject.notify();
+                }
 
             }
         }
@@ -50,9 +64,8 @@ public class Readable implements Runnable {
             channel.write(ByteBuffer.wrap(
                     new String(
                             MainServer.windowNumber + "号窗口" + command + "："
-                                    + MainServer.windowQueue.get(windowNumber - 1))
+                                    + commandInteger)
                             .getBytes()));
-            System.out.println(windowNumber + "号窗口分配：" + MainServer.windowQueue.get(windowNumber - 1));
         }
 
     }
@@ -79,7 +92,7 @@ public class Readable implements Runnable {
             if (wNumIsEmpty(clientInput)) {
                 synchronized (MainServer.lockObject) {
                     ++MainServer.windowNumber;
-                    MainServer.windowQueue.offer(MainServer.windowNumber);
+                    MainServer.windowQueue.offer(new Window());
                     channel.write(ByteBuffer.wrap(
                             new String(MainServer.windowNumber + "号窗口" + "由于初始无窗口号现服务器已为您分配：").getBytes()));
                     System.out.println("已为客户端分配窗口号：" + MainServer.windowNumber);
