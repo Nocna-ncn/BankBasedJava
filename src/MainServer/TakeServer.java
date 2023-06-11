@@ -58,7 +58,7 @@ public class TakeServer implements Runnable {
                             }
                             if (numResult == -1) {
                                 for (int i = 0; i < MainServer.windowQueue.size(); i++) {
-                                    if (MainServer.windowQueue.get(i).personNumber.equals(number)) {
+                                    if (MainServer.windowQueue.get(i).equals(number)) {
                                         numResult = i + 1;
                                         send.write("此号码不在等待队列，目前在" + numResult + "号窗口。" + '\n');
                                         send.flush();

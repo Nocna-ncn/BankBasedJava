@@ -73,7 +73,8 @@ public class WindowClient {
                     case "s" -> send(channel, "过号");
 
                     case "q" -> {
-                        System.out.println("退出");
+                        send(channel, "退出");
+                        System.out.println("退出！");
                         running = false;
                         channel.close();
                         return;

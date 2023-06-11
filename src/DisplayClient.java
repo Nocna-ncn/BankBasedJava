@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Scanner;
 import ObjectTrans.LinkedListTrans;
-import ObjectTrans.Window;
+import DisplaySDK.*;
 
 public class DisplayClient {
 
@@ -21,24 +21,22 @@ public class DisplayClient {
         try (Socket socket = new Socket(serverAddress, serverPort)) {
             System.out.println("与服务器连接成功");
 
-                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-                while (true) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            while (true) {
 
                 receivedObject = (LinkedListTrans) objectInputStream.readObject();
 
-                System.out.println("Received object personlist: " + receivedObject.getPersonList());
+                LinkedList<?> personList = receivedObject.getPersonList();
+                LinkedList<?> windowList = receivedObject.getWindowList();
 
-                LinkedList<Window> list = (LinkedList<Window>) receivedObject.getWindowList();
-                LinkedList<Integer> windowList = new LinkedList<>();
+                System.out.println("Received person list: " + personList);
+                System.out.println("Received window list: " + windowList);
 
-                for (int i = 0; i < list.size(); i++) {
-                    windowList.offer(list.get(i).personNumber);
-                }
-
-                System.out.println("Received object windowlist: " + windowList);
-
+                Display display = new DisplayImpl();
+                display.getListName("排队号", "窗口");
+                display.displayTable(personList, windowList);
             }
-            
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -27,6 +27,7 @@ public class DisplayServer implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+
         }
 
     }
@@ -64,9 +65,12 @@ public class DisplayServer implements Runnable {
                             outputStream.reset();
                         }
                     }
-                    Thread.sleep(2000); // 暂停 2 秒钟
+
+                    Thread.sleep(1500);
                 }
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
