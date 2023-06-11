@@ -23,7 +23,7 @@ public class WindowClient {
 
     private static void send(SocketChannel channel, String command) throws IOException {
         String comment = windowNumber.toString() + "号窗口" + command;
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        ByteBuffer buffer = ByteBuffer.allocate(4096);
 
         channel.write(ByteBuffer.wrap(comment.getBytes()));
 
@@ -74,7 +74,6 @@ public class WindowClient {
 
                     case "q" -> {
                         send(channel, "退出");
-                        System.out.println("退出！");
                         running = false;
                         channel.close();
                         return;

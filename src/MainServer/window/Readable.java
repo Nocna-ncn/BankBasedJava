@@ -25,17 +25,22 @@ public class Readable implements Runnable {
 
     }
 
-    private static void whichCmd(SocketChannel channel, String clientInput) throws IOException {
-
-        String command = clientInput.substring(4, 6);
+    private static void whichCmd(SocketChannel channel, String command) throws IOException {
 
         String commandInteger = null;
 
         switch (command) {
             case "叫号" -> {
                 synchronized (MainServer.lockObject) {
-                    MainServer.windowQueue.set(windowNumber - 1, MainServer.personQueue.poll());
-                    commandInteger = MainServer.windowQueue.get(windowNumber - 1).toString();
+
+                    if (MainServer.personQueue.size() != 0) {
+                        MainServer.windowQueue.set(windowNumber - 1, MainServer.personQueue.poll());
+                        commandInteger = MainServer.windowQueue.get(windowNumber - 1).toString();
+                    } else {
+                        channel.write(ByteBuffer.wrap(new String("无排队号码，不可取号。").getBytes()));
+                        return;
+                    }
+
                 }
 
             }
@@ -43,10 +48,16 @@ public class Readable implements Runnable {
             case "过号" -> {
                 synchronized (MainServer.lockObject) {
 
-                    commandInteger = MainServer.windowQueue.get(windowNumber - 1).toString();
-                    if (commandInteger != null) {
-                        MainServer.personQueue.offer(MainServer.windowQueue.get(windowNumber - 1));
-                        MainServer.windowQueue.set(windowNumber - 1, null);
+                    if (MainServer.windowQueue.size() != 0 && MainServer.windowQueue.get(windowNumber - 1) != null) {
+                        commandInteger = MainServer.windowQueue.get(windowNumber - 1).toString();
+                        if (commandInteger != null) {
+                            MainServer.personQueue.offer(MainServer.windowQueue.get(windowNumber - 1));
+                            MainServer.windowQueue.set(windowNumber - 1, null);
+                        }
+                    } else {
+                        channel.write(ByteBuffer.wrap(new String("无号码，不可过号。").getBytes()));
+                        return;
+
                     }
 
                 }
@@ -54,8 +65,10 @@ public class Readable implements Runnable {
             case "退出" -> {
                 synchronized (MainServer.lockObject) {
                     MainServer.windowQueue.set(windowNumber - 1, -1);
+                    commandInteger = "已经退出！";
                 }
             }
+
         }
 
         synchronized (MainServer.lockObject) {
@@ -90,16 +103,20 @@ public class Readable implements Runnable {
 
             buffer.flip();
 
-            if (wNumIsEmpty(clientInput)) {
-                synchronized (MainServer.lockObject) {
-                    ++MainServer.windowNumberCount;
-                    MainServer.windowQueue.offer(null);
-                    channel.write(ByteBuffer.wrap(
-                            new String(MainServer.windowNumberCount + "号窗口" + "由于初始无窗口号现服务器已为您分配：").getBytes()));
-                    System.out.println("已为客户端分配窗口号：" + MainServer.windowNumberCount);
+            if (!clientInput.substring(4, 6).equals("退出")) {
+                if (wNumIsEmpty(clientInput)) {
+                    synchronized (MainServer.lockObject) {
+                        ++MainServer.windowNumberCount;
+                        MainServer.windowQueue.offer(null);
+                        channel.write(ByteBuffer.wrap(
+                                new String(MainServer.windowNumberCount + "号窗口" + "由于初始无窗口号现服务器已为您分配：").getBytes()));
+                        System.out.println("已为客户端分配窗口号：" + MainServer.windowNumberCount);
+                    }
+                } else {
+                    whichCmd(channel, clientInput.substring(4, 6));
                 }
             } else {
-                whichCmd(channel, clientInput);
+                whichCmd(channel, clientInput.substring(4, 6));
             }
 
         } catch (IOException e) {

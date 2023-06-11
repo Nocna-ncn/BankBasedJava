@@ -71,7 +71,7 @@ public class TakeNumber {
 
                     // System.out.println("已连接!");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    System.out.println("服务器返回>>> " + reader.readLine());
+                    System.out.println(">>> " + reader.readLine());
 
                     reader.close();
                     send.close();
