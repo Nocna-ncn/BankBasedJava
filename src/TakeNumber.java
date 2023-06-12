@@ -14,6 +14,7 @@ public class TakeNumber {
     public static void main(String[] args) {
 
         try (Scanner input = new Scanner(System.in)) {
+            serverAddress = null;
             System.out.print("请输入服务器地址：");
             serverAddress = input.nextLine();
             while (running) {

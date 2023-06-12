@@ -73,11 +73,13 @@ public class TakeServer implements Runnable {
 
                     }
                 }
+                synchronized (MainServer.lockObject) {
+                    send.close();
+                    reader.close();
+                    socket.close();
+                    System.out.println("关闭连接！");
+                }
 
-                send.close();
-                reader.close();
-                socket.close();
-                System.out.println("关闭连接！");
             }
         } catch (IOException e) {
             e.printStackTrace();
